@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OurWedding — App Screenshots</title>
+<style>
+  :root {
+    --bg: #f8f7f5;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #6b6b6b;
+    --accent: #c4956a;
+    --accent-hover: #b07d52;
+    --border: #e8e5e0;
+    --radius: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    text-align: center;
+    padding: 48px 24px 32px;
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--text-secondary);
+    margin-top: 6px;
+    font-size: 15px;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 24px 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .control-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .control-group label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .pill:hover { border-color: var(--accent); color: var(--text); }
+  .pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .grid {
+    display: grid;
+    gap: 20px;
+    padding: 0 24px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .grid.phone { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .grid.tablet { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .card .caption {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .lightbox.open { display: flex; }
+
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 92vh;
+    border-radius: 8px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  .lightbox .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .lightbox .nav-btn:hover { background: rgba(255,255,255,0.3); }
+  .lightbox .nav-btn.prev { left: 16px; }
+  .lightbox .nav-btn.next { right: 16px; }
+
+  .lightbox .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 600px) {
+    .grid.phone { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid.tablet { grid-template-columns: 1fr; }
+    header h1 { font-size: 22px; }
+    .controls { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>OurWedding — App Screenshots</h1>
+  <p>Marketing screenshot gallery &middot; 3 devices &middot; 7 locales</p>
+</header>
+
+<div class="controls">
+  <div class="control-group">
+    <label>Device</label>
+    <span class="pill active" data-device="iPhone 17 Pro Max">iPhone 17 Pro Max</span>
+    <span class="pill" data-device="iPhone 17 Pro">iPhone 17 Pro</span>
+    <span class="pill" data-device="iPad Pro 13-inch (M4)">iPad Pro 13&#8209;inch</span>
+  </div>
+  <div class="control-group">
+    <label>Locale</label>
+    <span class="pill active" data-locale="en-US">en&#8209;US</span>
+    <span class="pill" data-locale="en-GB">en&#8209;GB</span>
+    <span class="pill" data-locale="de-DE">de&#8209;DE</span>
+    <span class="pill" data-locale="es-ES">es&#8209;ES</span>
+    <span class="pill" data-locale="ca">ca</span>
+    <span class="pill" data-locale="cs">cs</span>
+    <span class="pill" data-locale="sk">sk</span>
+  </div>
+</div>
+
+<div class="grid phone" id="gallery"></div>
+
+<div class="lightbox" id="lightbox">
+  <button class="close-btn" id="lb-close" aria-label="Close">&times;</button>
+  <button class="nav-btn prev" id="lb-prev" aria-label="Previous">&#8249;</button>
+  <img id="lb-img" src="" alt="">
+  <button class="nav-btn next" id="lb-next" aria-label="Next">&#8250;</button>
+</div>
+
+<script>
+const screens = [
+  { id: '00', name: 'Event Overview' },
+  { id: '01', name: 'Guest List' },
+  { id: '02', name: 'Checklist' },
+  { id: '03', name: 'Vendors' },
+  { id: '04', name: 'Budget' },
+  { id: '05', name: 'Checklist Detail' },
+];
+
+const devices = {
+  'iPhone 17 Pro Max': { suffix: '_framed.png', type: 'phone' },
+  'iPhone 17 Pro':     { suffix: '_framed.png', type: 'phone' },
+  'iPad Pro 13-inch (M4)': { suffix: '_landscape_framed.png', type: 'tablet' },
+};
+
+let currentDevice = 'iPhone 17 Pro Max';
+let currentLocale = 'en-US';
+let lightboxIndex = 0;
+let lightboxImages = [];
+
+function buildPath(locale, device, screen) {
+  const d = devices[device];
+  const sep = device.startsWith('iPad') ? '-' + screen.id + '_' + screen.name.replace(/ /g, '_') : '-' + screen.id + '_' + screen.name.replace(/ /g, '_');
+  return encodeURIComponent(locale) + '/' + encodeURIComponent(device + '-' + screen.id + '_' + screen.name.replace(/ /g, '_') + d.suffix);
+}
+
+function render() {
+  const gallery = document.getElementById('gallery');
+  const d = devices[currentDevice];
+  gallery.className = 'grid ' + d.type;
+  lightboxImages = [];
+
+  gallery.innerHTML = screens.map((s, i) => {
+    const path = buildPath(currentLocale, currentDevice, s);
+    lightboxImages.push(path);
+    return `<div class="card" data-index="${i}">
+      <img src="${path}" alt="${s.name}" loading="lazy">
+      <div class="caption">${s.name}</div>
+    </div>`;
+  }).join('');
+}
+
+// Pill selection
+document.querySelectorAll('.pill[data-device]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.pill[data-device]').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    currentDevice = el.dataset.device;
+    render();
+  });
+});
+
+document.querySelectorAll('.pill[data-locale]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.pill[data-locale]').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    currentLocale = el.dataset.locale;
+    render();
+  });
+});
+
+// Lightbox
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+
+function openLightbox(idx) {
+  lightboxIndex = idx;
+  lbImg.src = lightboxImages[idx];
+  lb.classList.add('open');
+}
+
+function closeLightbox() { lb.classList.remove('open'); }
+
+document.getElementById('gallery').addEventListener('click', e => {
+  const card = e.target.closest('.card');
+  if (card) openLightbox(parseInt(card.dataset.index));
+});
+
+lb.addEventListener('click', e => {
+  if (e.target === lb) closeLightbox();
+});
+
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+
+document.getElementById('lb-prev').addEventListener('click', e => {
+  e.stopPropagation();
+  lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+  lbImg.src = lightboxImages[lightboxIndex];
+});
+
+document.getElementById('lb-next').addEventListener('click', e => {
+  e.stopPropagation();
+  lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+  lbImg.src = lightboxImages[lightboxIndex];
+});
+
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') document.getElementById('lb-prev').click();
+  if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
+});
+
+render();
+</script>
+</body>
+</html>
