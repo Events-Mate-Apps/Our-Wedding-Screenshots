@@ -131,6 +131,20 @@
     border-top: 1px solid var(--border);
   }
 
+  .card .variant-label {
+    padding: 6px 14px 2px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-secondary);
+    background: var(--bg);
+  }
+
+  .card .raw-img {
+    border-top: 1px solid var(--border);
+  }
+
   /* Lightbox */
   .lightbox {
     display: none;
@@ -247,9 +261,9 @@ const screens = [
 ];
 
 const devices = {
-  'iPhone 17 Pro Max': { suffix: '_framed.png', type: 'phone' },
-  'iPhone 17 Pro':     { suffix: '_framed.png', type: 'phone' },
-  'iPad Pro 13-inch (M4)': { suffix: '_landscape_framed.png', type: 'tablet' },
+  'iPhone 17 Pro Max': { framedSuffix: '_framed.png', rawSuffix: '.png', type: 'phone' },
+  'iPhone 17 Pro':     { framedSuffix: '_framed.png', rawSuffix: '.png', type: 'phone' },
+  'iPad Pro 13-inch (M4)': { framedSuffix: '_landscape_framed.png', rawSuffix: '_landscape.png', type: 'tablet' },
 };
 
 let currentDevice = 'iPhone 17 Pro Max';
@@ -257,10 +271,9 @@ let currentLocale = 'en-US';
 let lightboxIndex = 0;
 let lightboxImages = [];
 
-function buildPath(locale, device, screen) {
-  const d = devices[device];
-  const sep = device.startsWith('iPad') ? '-' + screen.id + '_' + screen.name.replace(/ /g, '_') : '-' + screen.id + '_' + screen.name.replace(/ /g, '_');
-  return encodeURIComponent(locale) + '/' + encodeURIComponent(device + '-' + screen.id + '_' + screen.name.replace(/ /g, '_') + d.suffix);
+function buildPath(locale, device, screen, suffix) {
+  const base = device + '-' + screen.id + '_' + screen.name.replace(/ /g, '_') + suffix;
+  return encodeURIComponent(locale) + '/' + encodeURIComponent(base);
 }
 
 function render() {
@@ -270,10 +283,14 @@ function render() {
   lightboxImages = [];
 
   gallery.innerHTML = screens.map((s, i) => {
-    const path = buildPath(currentLocale, currentDevice, s);
-    lightboxImages.push(path);
-    return `<div class="card" data-index="${i}">
-      <img src="${path}" alt="${s.name}" loading="lazy">
+    const framedPath = buildPath(currentLocale, currentDevice, s, d.framedSuffix);
+    const rawPath = buildPath(currentLocale, currentDevice, s, d.rawSuffix);
+    lightboxImages.push(framedPath, rawPath);
+    return `<div class="card">
+      <div class="variant-label">Framed</div>
+      <img src="${framedPath}" alt="${s.name} — framed" loading="lazy" data-index="${i * 2}">
+      <div class="variant-label raw-img">Raw</div>
+      <img src="${rawPath}" alt="${s.name} — raw" loading="lazy" data-index="${i * 2 + 1}">
       <div class="caption">${s.name}</div>
     </div>`;
   }).join('');
@@ -311,8 +328,8 @@ function openLightbox(idx) {
 function closeLightbox() { lb.classList.remove('open'); }
 
 document.getElementById('gallery').addEventListener('click', e => {
-  const card = e.target.closest('.card');
-  if (card) openLightbox(parseInt(card.dataset.index));
+  const img = e.target.closest('img[data-index]');
+  if (img) openLightbox(parseInt(img.dataset.index));
 });
 
 lb.addEventListener('click', e => {
