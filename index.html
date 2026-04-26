@@ -26,9 +26,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  body.theme-dark {
+    --bg: #0e0e10;
+    --surface: #1a1a1d;
+    --text: #f4f3f1;
+    --text-secondary: #9a9a9a;
+    --border: #2a2a2e;
+  }
+
   header {
     text-align: center;
-    padding: 48px 24px 32px;
+    padding: 48px 24px 16px;
   }
 
   header h1 {
@@ -43,13 +51,40 @@
     font-size: 15px;
   }
 
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 16px 24px 16px;
+  }
+
+  .tab {
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .tab:hover { border-color: var(--accent); color: var(--text); }
+  .tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
   .controls {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
+    gap: 16px 20px;
     padding: 0 24px 32px;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
   }
 
@@ -96,12 +131,15 @@
     display: grid;
     gap: 20px;
     padding: 0 24px 64px;
-    max-width: 1400px;
+    max-width: 1500px;
     margin: 0 auto;
   }
 
-  .grid.phone { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+  .grid.phone { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
   .grid.tablet { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+  .grid.web-mobile { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .grid.web-tablet { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }
+  .grid.web-desktop { grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); }
 
   .card {
     background: var(--surface);
@@ -109,7 +147,6 @@
     overflow: hidden;
     border: 1px solid var(--border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
   }
 
   .card:hover {
@@ -121,6 +158,8 @@
     width: 100%;
     height: auto;
     display: block;
+    cursor: zoom-in;
+    background: var(--bg);
   }
 
   .card .caption {
@@ -131,18 +170,25 @@
     border-top: 1px solid var(--border);
   }
 
-  .card .variant-label {
-    padding: 6px 14px 2px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-secondary);
-    background: var(--bg);
+  .card.nobg img {
+    background:
+      conic-gradient(var(--border) 25%, transparent 0 50%, var(--border) 0 75%, transparent 0) 0 0/16px 16px,
+      var(--surface);
   }
 
-  .card .raw-img {
-    border-top: 1px solid var(--border);
+  .status {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .status code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--surface);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
   }
 
   /* Lightbox */
@@ -208,10 +254,10 @@
   }
 
   @media (max-width: 600px) {
-    .grid.phone { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .grid.tablet { grid-template-columns: 1fr; }
+    .grid.phone, .grid.web-mobile { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid.tablet, .grid.web-tablet, .grid.web-desktop { grid-template-columns: 1fr; }
     header h1 { font-size: 22px; }
-    .controls { gap: 8px; }
+    .controls { gap: 10px 12px; }
   }
 </style>
 </head>
@@ -219,29 +265,14 @@
 
 <header>
   <h1>OurWedding — App Screenshots</h1>
-  <p>Marketing screenshot gallery &middot; 3 devices &middot; 7 locales</p>
+  <p id="subtitle">Marketing screenshot gallery</p>
 </header>
 
-<div class="controls">
-  <div class="control-group">
-    <label>Device</label>
-    <span class="pill active" data-device="iPhone 17 Pro Max">iPhone 17 Pro Max</span>
-    <span class="pill" data-device="iPhone 17 Pro">iPhone 17 Pro</span>
-    <span class="pill" data-device="iPad Pro 13-inch (M4)">iPad Pro 13&#8209;inch</span>
-  </div>
-  <div class="control-group">
-    <label>Locale</label>
-    <span class="pill active" data-locale="en-US">en&#8209;US</span>
-    <span class="pill" data-locale="en-GB">en&#8209;GB</span>
-    <span class="pill" data-locale="de-DE">de&#8209;DE</span>
-    <span class="pill" data-locale="es-ES">es&#8209;ES</span>
-    <span class="pill" data-locale="ca">ca</span>
-    <span class="pill" data-locale="cs">cs</span>
-    <span class="pill" data-locale="sk">sk</span>
-  </div>
+<div class="tabs" id="tabs"></div>
+<div class="controls" id="controls"></div>
+<div id="content">
+  <div class="status">Loading screenshots…</div>
 </div>
-
-<div class="grid phone" id="gallery"></div>
 
 <div class="lightbox" id="lightbox">
   <button class="close-btn" id="lb-close" aria-label="Close">&times;</button>
@@ -251,71 +282,349 @@
 </div>
 
 <script>
-const screens = [
-  { id: '00', name: 'Event Overview' },
-  { id: '01', name: 'Guest List' },
-  { id: '02', name: 'Checklist' },
-  { id: '03', name: 'Vendors' },
-  { id: '04', name: 'Budget' },
-  { id: '05', name: 'Checklist Detail' },
-];
+// ---- Config -----------------------------------------------------------------
+// Repo & branch are auto-detected when served from GitHub Pages
+// (e.g. https://events-mate-apps.github.io/Our-Wedding-Screenshots/), and
+// fall back to these defaults otherwise.
+const DEFAULT_REPO = 'Events-Mate-Apps/Our-Wedding-Screenshots';
+const DEFAULT_BRANCH = 'main';
+const CACHE_KEY = 'ow_screenshots_tree_v1';
+const CACHE_TTL_MS = 5 * 60 * 1000;
 
-const devices = {
-  'iPhone 17 Pro Max': { framedSuffix: '_framed.png', rawSuffix: '.png', type: 'phone' },
-  'iPhone 17 Pro':     { framedSuffix: '_framed.png', rawSuffix: '.png', type: 'phone' },
-  'iPad Pro 13-inch (M4)': { framedSuffix: '_landscape_framed.png', rawSuffix: '_landscape.png', type: 'tablet' },
+function detectRepo() {
+  // GitHub Pages user/org site path: https://<user>.github.io/<repo>/...
+  const host = location.hostname;
+  const m = host.match(/^([^.]+)\.github\.io$/i);
+  if (m) {
+    const seg = location.pathname.split('/').filter(Boolean)[0];
+    if (seg) return `${m[1]}/${seg}`;
+  }
+  return DEFAULT_REPO;
+}
+
+const REPO = detectRepo();
+
+// ---- Tree fetching & parsing ------------------------------------------------
+async function fetchTree() {
+  const cached = sessionStorage.getItem(CACHE_KEY);
+  if (cached) {
+    try {
+      const { ts, paths, repo } = JSON.parse(cached);
+      if (repo === REPO && Date.now() - ts < CACHE_TTL_MS) return paths;
+    } catch (_) {}
+  }
+  // Try default branch first, then fall back.
+  const branches = [DEFAULT_BRANCH, 'master', 'gh-pages'];
+  let lastErr;
+  for (const branch of branches) {
+    try {
+      const url = `https://api.github.com/repos/${REPO}/git/trees/${branch}?recursive=1`;
+      const r = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
+      if (!r.ok) { lastErr = new Error(`${r.status} ${r.statusText}`); continue; }
+      const json = await r.json();
+      const paths = (json.tree || [])
+        .filter(t => t.type === 'blob')
+        .map(t => t.path)
+        .filter(p => p.toLowerCase().endsWith('.png'));
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), paths, repo: REPO }));
+      return paths;
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('Failed to fetch repo tree');
+}
+
+function parseIosFile(name) {
+  if (!name.toLowerCase().endsWith('.png')) return null;
+  let n = name.slice(0, -4);
+  let framed = false;
+  if (n.endsWith('_framed')) { framed = true; n = n.slice(0, -'_framed'.length); }
+  let dark = false;
+  if (n.endsWith('_dark')) { dark = true; n = n.slice(0, -'_dark'.length); }
+  let landscape = false;
+  if (n.endsWith('_landscape')) { landscape = true; n = n.slice(0, -'_landscape'.length); }
+  const dash = n.indexOf('-');
+  if (dash < 0) return null;
+  const device = n.slice(0, dash);
+  const rest = n.slice(dash + 1);
+  const us = rest.indexOf('_');
+  if (us < 0) return null;
+  const screenId = rest.slice(0, us);
+  const screenName = rest.slice(us + 1).replace(/_/g, ' ');
+  return { device, screenId, screenName, framed, dark, landscape };
+}
+
+function parseWebFile(name) {
+  if (!name.toLowerCase().endsWith('.png')) return null;
+  let n = name.slice(0, -4);
+  let framed = false;
+  if (n.endsWith('_framed')) { framed = true; n = n.slice(0, -'_framed'.length); }
+  const dash = n.indexOf('-');
+  if (dash < 0) return null;
+  const screenId = n.slice(0, dash);
+  const slug = n.slice(dash + 1);
+  const screenName = slug.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  return { screenId, slug, screenName, framed };
+}
+
+function buildIndex(paths) {
+  const ios = []; // {style, locale, device, screenId, screenName, theme, path, sortId}
+  const web = []; // {style, locale, viewport, screenId, screenName, slug, path, sortId}
+
+  for (const p of paths) {
+    const parts = p.split('/');
+    if (parts[0] === 'ios' && parts.length === 4) {
+      const [, style, locale, file] = parts;
+      const meta = parseIosFile(file);
+      if (!meta) continue;
+      ios.push({
+        style, locale,
+        device: meta.device,
+        screenId: meta.screenId,
+        screenName: meta.screenName,
+        theme: meta.dark ? 'dark' : 'light',
+        path: p,
+      });
+    } else if (parts[0] === 'web' && parts.length === 5) {
+      const [, style, locale, viewport, file] = parts;
+      const meta = parseWebFile(file);
+      if (!meta) continue;
+      web.push({
+        style, locale, viewport,
+        screenId: meta.screenId,
+        screenName: meta.screenName,
+        slug: meta.slug,
+        path: p,
+      });
+    }
+  }
+  return { ios, web };
+}
+
+// ---- UI helpers -------------------------------------------------------------
+function uniqSorted(arr, keyFn = (x => x), cmp = null) {
+  const seen = new Map();
+  for (const x of arr) {
+    const k = keyFn(x);
+    if (!seen.has(k)) seen.set(k, x);
+  }
+  const out = Array.from(seen.values());
+  if (cmp) out.sort(cmp);
+  else out.sort((a, b) => String(keyFn(a)).localeCompare(String(keyFn(b))));
+  return out;
+}
+
+function prettyDevice(name) {
+  return name.replace(/_/g, ' ').replace(/(\d+)-inch M\d+/, '$1"');
+}
+
+function deviceGrid(name) {
+  return /iPad|tablet/i.test(name) ? 'tablet' : 'phone';
+}
+
+function pillGroup(label, items, value, onSelect) {
+  if (items.length <= 1) return null;
+  const group = document.createElement('div');
+  group.className = 'control-group';
+  const lbl = document.createElement('label');
+  lbl.textContent = label;
+  group.appendChild(lbl);
+  items.forEach(item => {
+    const pill = document.createElement('span');
+    pill.className = 'pill' + (item.value === value ? ' active' : '');
+    pill.textContent = item.label;
+    pill.addEventListener('click', () => onSelect(item.value));
+    group.appendChild(pill);
+  });
+  return group;
+}
+
+function styleLabel(id) {
+  return ({
+    framed: 'Framed',
+    framed_nobg: 'No BG',
+    raw: 'Raw',
+  })[id] || id;
+}
+
+function viewportLabel(id) {
+  return id[0].toUpperCase() + id.slice(1);
+}
+
+// ---- App state --------------------------------------------------------------
+const state = {
+  platform: 'ios',
+  ios: { device: null, locale: null, style: null, theme: null },
+  web: { viewport: null, locale: null, style: null },
 };
 
-let currentDevice = 'iPhone 17 Pro Max';
-let currentLocale = 'en-US';
-let lightboxIndex = 0;
+let INDEX = { ios: [], web: [] };
 let lightboxImages = [];
+let lightboxIndex = 0;
 
-function buildPath(locale, device, screen, suffix) {
-  const base = device + '-' + screen.id + '_' + screen.name.replace(/ /g, '_') + suffix;
-  return encodeURIComponent(locale) + '/' + encodeURIComponent(base);
+// ---- Rendering --------------------------------------------------------------
+function pickDefault(arr, preferred) {
+  if (!arr.length) return null;
+  for (const p of preferred) if (arr.includes(p)) return p;
+  return arr[0];
+}
+
+function ensureIosDefaults() {
+  const styles = uniqSorted(INDEX.ios.map(e => e.style)).map(s => s);
+  const locales = uniqSorted(INDEX.ios.map(e => e.locale)).map(s => s);
+  const devices = uniqSorted(INDEX.ios.map(e => e.device)).map(s => s);
+  const themes = uniqSorted(INDEX.ios.map(e => e.theme));
+  if (!styles.includes(state.ios.style))
+    state.ios.style = pickDefault(styles, ['framed', 'framed_nobg', 'raw']);
+  if (!locales.includes(state.ios.locale))
+    state.ios.locale = pickDefault(locales, ['en-US', 'en-GB', 'en']);
+  if (!devices.includes(state.ios.device))
+    state.ios.device = pickDefault(devices, ['iPhone_17_Pro_Max', 'iPhone_17_Pro']);
+  if (!themes.includes(state.ios.theme))
+    state.ios.theme = pickDefault(themes, ['light', 'dark']);
+}
+
+function ensureWebDefaults() {
+  const styles = uniqSorted(INDEX.web.map(e => e.style));
+  const locales = uniqSorted(INDEX.web.map(e => e.locale));
+  const viewports = uniqSorted(INDEX.web.map(e => e.viewport));
+  if (!styles.includes(state.web.style))
+    state.web.style = pickDefault(styles, ['framed', 'raw']);
+  if (!locales.includes(state.web.locale))
+    state.web.locale = pickDefault(locales, ['en']);
+  if (!viewports.includes(state.web.viewport))
+    state.web.viewport = pickDefault(viewports, ['desktop', 'tablet', 'mobile']);
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('tabs');
+  const platforms = [];
+  if (INDEX.ios.length) platforms.push({ id: 'ios', label: 'iOS' });
+  if (INDEX.web.length) platforms.push({ id: 'web', label: 'Web' });
+  if (!platforms.find(p => p.id === state.platform)) {
+    state.platform = platforms[0]?.id || 'ios';
+  }
+  tabs.innerHTML = '';
+  platforms.forEach(p => {
+    const el = document.createElement('span');
+    el.className = 'tab' + (p.id === state.platform ? ' active' : '');
+    el.textContent = p.label;
+    el.addEventListener('click', () => {
+      state.platform = p.id;
+      render();
+    });
+    tabs.appendChild(el);
+  });
+}
+
+function renderControls() {
+  const c = document.getElementById('controls');
+  c.innerHTML = '';
+
+  if (state.platform === 'ios') {
+    ensureIosDefaults();
+    const devices = uniqSorted(INDEX.ios.map(e => e.device));
+    const locales = uniqSorted(INDEX.ios.map(e => e.locale));
+    const styles  = uniqSorted(INDEX.ios.map(e => e.style));
+    // Themes available given current style+locale+device:
+    const themes = uniqSorted(INDEX.ios
+      .filter(e => e.style === state.ios.style && e.locale === state.ios.locale && e.device === state.ios.device)
+      .map(e => e.theme));
+
+    const groups = [
+      pillGroup('Device', devices.map(d => ({ value: d, label: prettyDevice(d) })),
+        state.ios.device, v => { state.ios.device = v; render(); }),
+      pillGroup('Locale', locales.map(l => ({ value: l, label: l.replace('-', '‑') })),
+        state.ios.locale, v => { state.ios.locale = v; render(); }),
+      pillGroup('Style', styles.map(s => ({ value: s, label: styleLabel(s) })),
+        state.ios.style, v => { state.ios.style = v; render(); }),
+      pillGroup('Theme', themes.map(t => ({ value: t, label: t[0].toUpperCase() + t.slice(1) })),
+        state.ios.theme, v => { state.ios.theme = v; render(); }),
+    ];
+    if (!themes.includes(state.ios.theme)) state.ios.theme = themes[0];
+    groups.filter(Boolean).forEach(g => c.appendChild(g));
+  } else {
+    ensureWebDefaults();
+    const viewports = uniqSorted(INDEX.web.map(e => e.viewport));
+    const locales   = uniqSorted(INDEX.web.map(e => e.locale));
+    const styles    = uniqSorted(INDEX.web.map(e => e.style));
+    const groups = [
+      pillGroup('Viewport', viewports.map(v => ({ value: v, label: viewportLabel(v) })),
+        state.web.viewport, v => { state.web.viewport = v; render(); }),
+      pillGroup('Locale', locales.map(l => ({ value: l, label: l })),
+        state.web.locale, v => { state.web.locale = v; render(); }),
+      pillGroup('Style', styles.map(s => ({ value: s, label: styleLabel(s) })),
+        state.web.style, v => { state.web.style = v; render(); }),
+    ];
+    groups.filter(Boolean).forEach(g => c.appendChild(g));
+  }
+}
+
+function renderGallery() {
+  const container = document.getElementById('content');
+  const subtitle = document.getElementById('subtitle');
+  lightboxImages = [];
+
+  let entries, gridClass, label;
+  if (state.platform === 'ios') {
+    entries = INDEX.ios.filter(e =>
+      e.style === state.ios.style &&
+      e.locale === state.ios.locale &&
+      e.device === state.ios.device &&
+      e.theme  === state.ios.theme
+    );
+    gridClass = deviceGrid(state.ios.device || '');
+    label = `iOS · ${prettyDevice(state.ios.device || '')} · ${state.ios.locale} · ${styleLabel(state.ios.style)} · ${state.ios.theme}`;
+  } else {
+    entries = INDEX.web.filter(e =>
+      e.style === state.web.style &&
+      e.locale === state.web.locale &&
+      e.viewport === state.web.viewport
+    );
+    gridClass = 'web-' + state.web.viewport;
+    label = `Web · ${viewportLabel(state.web.viewport || '')} · ${state.web.locale} · ${styleLabel(state.web.style)}`;
+  }
+
+  subtitle.textContent = label + ` · ${entries.length} screen${entries.length === 1 ? '' : 's'}`;
+
+  entries.sort((a, b) => a.screenId.localeCompare(b.screenId));
+
+  if (!entries.length) {
+    container.innerHTML = `<div class="status">No screenshots found for this combination.</div>`;
+    return;
+  }
+
+  const nobgClass = state.platform === 'ios' && state.ios.style === 'framed_nobg' ? ' nobg' : '';
+  const html = ['<div class="grid ' + gridClass + '" id="gallery">'];
+  entries.forEach((e, i) => {
+    lightboxImages.push(e.path);
+    html.push(`
+      <div class="card${nobgClass}">
+        <img src="${e.path}" alt="${e.screenName}" loading="lazy" data-index="${i}">
+        <div class="caption">${e.screenName}</div>
+      </div>`);
+  });
+  html.push('</div>');
+  container.innerHTML = html.join('');
+
+  document.getElementById('gallery').addEventListener('click', ev => {
+    const img = ev.target.closest('img[data-index]');
+    if (img) openLightbox(parseInt(img.dataset.index));
+  });
+}
+
+function applyBodyTheme() {
+  document.body.classList.toggle('theme-dark',
+    state.platform === 'ios' && state.ios.theme === 'dark');
 }
 
 function render() {
-  const gallery = document.getElementById('gallery');
-  const d = devices[currentDevice];
-  gallery.className = 'grid ' + d.type;
-  lightboxImages = [];
-
-  gallery.innerHTML = screens.map((s, i) => {
-    const framedPath = buildPath(currentLocale, currentDevice, s, d.framedSuffix);
-    const rawPath = buildPath(currentLocale, currentDevice, s, d.rawSuffix);
-    lightboxImages.push(framedPath, rawPath);
-    return `<div class="card">
-      <div class="variant-label">Framed</div>
-      <img src="${framedPath}" alt="${s.name} — framed" loading="lazy" data-index="${i * 2}">
-      <div class="variant-label raw-img">Raw</div>
-      <img src="${rawPath}" alt="${s.name} — raw" loading="lazy" data-index="${i * 2 + 1}">
-      <div class="caption">${s.name}</div>
-    </div>`;
-  }).join('');
+  renderTabs();
+  renderControls();
+  renderGallery();
+  applyBodyTheme();
 }
 
-// Pill selection
-document.querySelectorAll('.pill[data-device]').forEach(el => {
-  el.addEventListener('click', () => {
-    document.querySelectorAll('.pill[data-device]').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    currentDevice = el.dataset.device;
-    render();
-  });
-});
-
-document.querySelectorAll('.pill[data-locale]').forEach(el => {
-  el.addEventListener('click', () => {
-    document.querySelectorAll('.pill[data-locale]').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    currentLocale = el.dataset.locale;
-    render();
-  });
-});
-
-// Lightbox
+// ---- Lightbox ---------------------------------------------------------------
 const lb = document.getElementById('lightbox');
 const lbImg = document.getElementById('lb-img');
 
@@ -324,32 +633,20 @@ function openLightbox(idx) {
   lbImg.src = lightboxImages[idx];
   lb.classList.add('open');
 }
-
 function closeLightbox() { lb.classList.remove('open'); }
 
-document.getElementById('gallery').addEventListener('click', e => {
-  const img = e.target.closest('img[data-index]');
-  if (img) openLightbox(parseInt(img.dataset.index));
-});
-
-lb.addEventListener('click', e => {
-  if (e.target === lb) closeLightbox();
-});
-
+lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
 document.getElementById('lb-close').addEventListener('click', closeLightbox);
-
 document.getElementById('lb-prev').addEventListener('click', e => {
   e.stopPropagation();
   lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
   lbImg.src = lightboxImages[lightboxIndex];
 });
-
 document.getElementById('lb-next').addEventListener('click', e => {
   e.stopPropagation();
   lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
   lbImg.src = lightboxImages[lightboxIndex];
 });
-
 document.addEventListener('keydown', e => {
   if (!lb.classList.contains('open')) return;
   if (e.key === 'Escape') closeLightbox();
@@ -357,7 +654,26 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') document.getElementById('lb-next').click();
 });
 
-render();
+// ---- Bootstrap --------------------------------------------------------------
+(async () => {
+  const container = document.getElementById('content');
+  try {
+    const paths = await fetchTree();
+    INDEX = buildIndex(paths);
+    if (!INDEX.ios.length && !INDEX.web.length) {
+      container.innerHTML = `<div class="status">No screenshots found in <code>${REPO}</code>.</div>`;
+      return;
+    }
+    render();
+  } catch (err) {
+    container.innerHTML = `<div class="status">
+      Could not load screenshot index from GitHub
+      (<code>${REPO}</code>).<br>
+      ${err && err.message ? err.message : ''}
+      <br><br>This may be a temporary API rate-limit; please refresh in a minute.
+    </div>`;
+  }
+})();
 </script>
 </body>
 </html>
