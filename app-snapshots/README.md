@@ -29,7 +29,7 @@ re-recording, run the sync script in the relevant app repo:
 # Android
 tools/sync-snapshots.sh --commit
 # iOS
-Scripts/sync-snapshots.sh --commit
+scripts/sync-snapshots.sh --commit
 ```
 
 (The screenshots repo is found at `../../Our-Wedding-Screenshots` by default;
